@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>rustBrowser | The Oxidized Web</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --rust: #CE412B;
+            --rust-glow: rgba(206, 65, 43, 0.4);
+        }
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #050505;
+            color: #ffffff;
+            overflow-x: hidden;
+            margin: 0;
+        }
+        .mono { font-family: 'Fira Code', monospace; }
+        
+        /* Liquid Glass Effects */
+        .glass {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(25px) saturate(180%);
+            -webkit-backdrop-filter: blur(25px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.8);
+        }
+        .glass-high {
+            background: rgba(255, 255, 255, 0.07);
+            backdrop-filter: blur(40px) saturate(200%);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+        .rust-gradient {
+            background: linear-gradient(135deg, #CE412B 0%, #ff6b54 100%);
+        }
+        
+        /* Metaball Liquid Animation */
+        .liquid-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            filter: url('#goo');
+            overflow: hidden;
+        }
+        .blob {
+            position: absolute;
+            background: var(--rust);
+            border-radius: 50%;
+            filter: blur(40px);
+            opacity: 0.3;
+            animation: move 20s infinite alternate ease-in-out;
+        }
+        @keyframes move {
+            from { transform: translate(-20%, -20%) scale(1); }
+            to { transform: translate(120%, 120%) scale(1.5); }
+        }
+        .blob:nth-child(2) { animation-duration: 25s; animation-delay: -5s; background: #8B2C1D; }
+        .blob:nth-child(3) { animation-duration: 30s; animation-delay: -10s; background: #521810; }
+
+        /* Shimmer Effect */
+        .shimmer {
+            position: relative;
+            overflow: hidden;
+        }
+        .shimmer::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+                to bottom right,
+                rgba(255, 255, 255, 0) 0%,
+                rgba(255, 255, 255, 0.1) 50%,
+                rgba(255, 255, 255, 0) 100%
+            );
+            transform: rotate(45deg);
+            animation: shimmer 6s infinite;
+        }
+        @keyframes shimmer {
+            0% { transform: translateX(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) rotate(45deg); }
+        }
+
+        .clickable {
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .clickable:hover {
+            transform: translateY(-4px) scale(1.02);
+            filter: brightness(1.2);
+        }
+        .clickable:active {
+            transform: translateY(0px) scale(0.98);
+        }
+
+        .terminal-scroll::-webkit-scrollbar { width: 4px; }
+        .terminal-scroll::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.2); border-radius: 10px; }
+    </style>
+</head>
+<body>
+    <!-- SVG Filter for Liquid Effect -->
+    <svg xmlns="http://www.w3.org/2000/svg" version="1.1" style="display:none">
+      <defs>
+        <filter id="goo">
+          <feGaussianBlur in="SourceGraphic" stdDeviation="30" result="blur" />
+          <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 35 -15" result="goo" />
+          <feBlend in="SourceGraphic" in2="goo" />
+        </filter>
+      </defs>
+    </svg>
+
+    <div class="liquid-container">
+        <div class="blob" style="width: 500px; height: 500px; top: -10%; left: -10%;"></div>
+        <div class="blob" style="width: 400px; height: 400px; top: 60%; left: 70%;"></div>
+        <div class="blob" style="width: 600px; height: 600px; top: 30%; left: 20%;"></div>
+    </div>
+
+    <div id="root"></div>
+    <script type="importmap">
+{
+  "imports": {
+    "react": "https://esm.sh/react@19.2.3",
+    "react-dom": "https://esm.sh/react-dom@19.2.3",
+    "react-dom/client": "https://esm.sh/react-dom@19.2.3/client",
+    "@google/genai": "https://esm.sh/@google/genai@1.34.0",
+    "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
+    "react/": "https://esm.sh/react@^19.2.3/"
+  }
+}
+</script>
+    <script type="module" src="index.tsx"></script>
+</body>
+</html>
